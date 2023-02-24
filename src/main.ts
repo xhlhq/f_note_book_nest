@@ -2,7 +2,7 @@
  * @Author: xhlhq 2874864487@qq.com
  * @Date: 2023-02-23 11:13:09
  * @LastEditors: xhlhq 2874864487@qq.com
- * @LastEditTime: 2023-02-23 20:33:34
+ * @LastEditTime: 2023-02-24 12:01:32
  * @FilePath: \f_note_book_nest\src\main.ts
  * @Description: 
  * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved. 
@@ -14,7 +14,6 @@ import { VersioningType, ValidationPipe } from '@nestjs/common';
 import * as session from 'express-session';
 import { HttpFilter } from "./common/filter"
 import { Response } from "./common/response"
-import DEFAULT_CONFIG from './config/constant';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
@@ -28,7 +27,7 @@ async function bootstrap() {
   // 设置session
   app.use(
     session({
-      secret: DEFAULT_CONFIG.SESSION_SECRET,
+      secret: process.env.SESSION_SECRET,
       rolling: true,
       cookie: { maxAge: 60 * 1000 },
     }),
@@ -48,6 +47,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
   // 启动
   SwaggerModule.setup("/api-docs", app, document);
-  await app.listen(3010);
+  await app.listen(process.env.SERVER_PORT);
 }
 bootstrap();
