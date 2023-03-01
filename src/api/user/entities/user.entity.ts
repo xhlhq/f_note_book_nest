@@ -2,12 +2,13 @@
  * @Author: xhlhq 2874864487@qq.com
  * @Date: 2023-02-23 14:32:58
  * @LastEditors: xhlhq 2874864487@qq.com
- * @LastEditTime: 2023-02-23 21:06:41
+ * @LastEditTime: 2023-02-28 22:37:20
  * @FilePath: \f_note_book_nest\src\api\user\entities\user.entity.ts
  * @Description: 
  * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved. 
  */
-import { Entity, Column } from 'typeorm'
+import { Article } from 'src/api/article/entities/article.entity'
+import { Entity, Column, OneToMany } from 'typeorm'
 import BaseEntity from '../../../common/baseEntity'
 
 @Entity()
@@ -16,7 +17,6 @@ export class User extends BaseEntity {
     type: 'char',
     comment: '用户名',
     length: '48',
-    unique: true
   })
   username: string
 
@@ -30,7 +30,6 @@ export class User extends BaseEntity {
   @Column({
     type: 'char',
     comment: '昵称',
-    unique: true,
     length: '255',
     default: null
   })
@@ -47,7 +46,6 @@ export class User extends BaseEntity {
   @Column({
     type: 'char',
     comment: '联系电话',
-    unique: true,
     length: '36',
     default: null
   })
@@ -56,7 +54,6 @@ export class User extends BaseEntity {
   @Column({
     type: 'char',
     comment: '邮箱',
-    unique: true,
     length: '48',
     default: null
   })
@@ -75,5 +72,10 @@ export class User extends BaseEntity {
     length: '36',
     default: null
   })
+
+  // 作者文章
+  @OneToMany(() => Article, article => article.author)
+  articles: Article[];
+
   gender: string
 }

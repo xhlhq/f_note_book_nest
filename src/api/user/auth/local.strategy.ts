@@ -1,8 +1,17 @@
+/*
+ * @Author: xhlhq 2874864487@qq.com
+ * @Date: 2023-02-24 10:02:18
+ * @LastEditors: xhlhq 2874864487@qq.com
+ * @LastEditTime: 2023-02-24 13:59:59
+ * @FilePath: \f_note_book_nest\src\api\user\auth\local.strategy.ts
+ * @Description: 
+ * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved. 
+ */
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, IStrategyOptions } from 'passport-local';
 import { Repository } from "typeorm"
 import { InjectRepository } from "@nestjs/typeorm"
-import { User } from './entities/user.entity'
+import { User } from '../entities/user.entity'
 import { HttpException, HttpStatus } from '@nestjs/common';
 import BcryptService from 'src/utils/bcrypt';
 

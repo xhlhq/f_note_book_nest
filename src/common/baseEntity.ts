@@ -2,7 +2,7 @@
  * @Author: xhlhq 2874864487@qq.com
  * @Date: 2023-02-23 17:20:50
  * @LastEditors: xhlhq 2874864487@qq.com
- * @LastEditTime: 2023-02-23 21:24:30
+ * @LastEditTime: 2023-02-28 21:18:15
  * @FilePath: \f_note_book_nest\src\common\baseEntity.ts
  * @Description: 
  * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved. 
@@ -20,6 +20,13 @@ export default abstract class BaseEntity {
   })
   @Generated("uuid")
   uuid: string;
+
+  @Column({
+    type: 'int',
+    comment: '排序',
+    default: 999
+  })
+  sort: number
 
   @CreateDateColumn({
     type: 'datetime',
