@@ -7,14 +7,12 @@
  * @Description: 
  * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved. 
  */
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, Session, UseGuards, Req, SetMetadata, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Session, UseGuards, Query } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginUserDto } from './dto/login-user.dto'
 import { AuthGuard } from '@nestjs/passport';
-import { CurrentUser } from './auth/current-user.decorator';
-import { User } from './entities/user.entity';
 import { ListUserDto } from './dto/list-user.dto';
 
 @Controller('user')

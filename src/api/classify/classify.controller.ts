@@ -1,11 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { query } from 'express';
 import { ClassifyService } from './classify.service';
 import { CreateClassifyDto } from './dto/create-classify.dto';
+import { ListClassifyDto } from './dto/list-classify.dto';
 import { UpdateClassifyDto } from './dto/update-classify.dto';
 
 @Controller('classify')
 export class ClassifyController {
-  constructor(private readonly classifyService: ClassifyService) {}
+  constructor(private readonly classifyService: ClassifyService) { }
 
   @Post()
   create(@Body() createClassifyDto: CreateClassifyDto) {
@@ -13,8 +15,8 @@ export class ClassifyController {
   }
 
   @Get()
-  findAll() {
-    return this.classifyService.findAll();
+  findAll(@Query() query: ListClassifyDto) {
+    return this.classifyService.findAll(query);
   }
 
   @Get(':id')

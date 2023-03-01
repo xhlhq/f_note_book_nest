@@ -2,7 +2,7 @@
  * @Author: xhlhq 2874864487@qq.com
  * @Date: 2023-02-23 11:13:09
  * @LastEditors: xhlhq 2874864487@qq.com
- * @LastEditTime: 2023-02-28 22:41:09
+ * @LastEditTime: 2023-03-01 21:34:02
  * @FilePath: \f_note_book_nest\src\app.module.ts
  * @Description: 
  * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved. 
@@ -14,9 +14,11 @@ import { LogMiddleware } from './middleware/log/log.middleware';
 import { UserModule } from './api/user/user.module'
 import { ArticleModule } from './api/article/article.module'
 import { CommonModule } from './libs/common/src';
+import { ClassifyModule } from './api/classify/classify.module';
+import { KeywordModule } from './api/keyword/keyword.module';
 
 @Module({
-  imports: [CommonModule, UserModule, ArticleModule],
+  imports: [CommonModule, UserModule, ArticleModule, ClassifyModule, KeywordModule],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -1,3 +1,10 @@
+/*
+ * @Author: xhlhq 2874864487@qq.com
+ * @Date: 2023-02-24 10:02:18
+ * @LastEditors: xhlhq 2874864487@qq.com
+ * @LastEditTime: 2023-03-01 21:39:45
+ * @Description: 
+ */
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -58,7 +65,6 @@ export class UserService {
   // 注册
   async register(createUserDto: CreateUserDto) {
     const { username, password } = createUserDto
-    const data = new User();
     const user = await this.user.findOne({
       select: ['id'],
       where: {
@@ -69,6 +75,7 @@ export class UserService {
     if (user !== null) {
       throw new HttpException('该用户名已注册账号', HttpStatus.NOT_FOUND);
     }
+    const data = new User();
     const salt = await BcryptService.genSalt();
     const bcryptPassword = await BcryptService.hash(password, salt);
     data.username = username;
@@ -79,7 +86,7 @@ export class UserService {
 
   async create(createUserDto: CreateUserDto) {
     const { username, password, nickname, brief, phone, email, gender, birthday } = createUserDto
-    const data = new User();
+
     const user = await this.user.findOne({
       select: ['id'],
       where: {
@@ -90,6 +97,7 @@ export class UserService {
     if (user !== null) {
       throw new HttpException('该用户名已注册账号', HttpStatus.NOT_FOUND);
     }
+    const data = new User();
     const salt = await BcryptService.genSalt();
     const bcryptPassword = await BcryptService.hash(password, salt);
     data.username = username;
