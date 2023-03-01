@@ -94,7 +94,7 @@ export class ClassifyService {
         }]
       })
       if (classify !== null) {
-        throw new HttpException('已经有该类型了', HttpStatus.NOT_FOUND);
+        throw new HttpException('已经有该类型了', HttpStatus.BAD_REQUEST);
       }
     }
     // 修改类型信息

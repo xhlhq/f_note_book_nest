@@ -1,11 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+/*
+ * @Author: xhlhq 2874864487@qq.com
+ * @Date: 2023-02-28 22:42:01
+ * @LastEditors: xhlhq 2874864487@qq.com
+ * @LastEditTime: 2023-03-01 22:16:35
+ * @Description: 
+ */
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { KeywordService } from './keyword.service';
 import { CreateKeywordDto } from './dto/create-keyword.dto';
 import { UpdateKeywordDto } from './dto/update-keyword.dto';
+import { ListKeywordDto } from './dto/list-keyword.dto';
 
 @Controller('keyword')
 export class KeywordController {
-  constructor(private readonly keywordService: KeywordService) {}
+  constructor(private readonly keywordService: KeywordService) { }
 
   @Post()
   create(@Body() createKeywordDto: CreateKeywordDto) {
@@ -13,8 +21,8 @@ export class KeywordController {
   }
 
   @Get()
-  findAll() {
-    return this.keywordService.findAll();
+  findAll(@Query() query: ListKeywordDto) {
+    return this.keywordService.findAll(query);
   }
 
   @Get(':id')
