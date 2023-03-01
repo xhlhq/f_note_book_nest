@@ -2,7 +2,7 @@
  * @Author: xhlhq 2874864487@qq.com
  * @Date: 2023-02-23 14:32:58
  * @LastEditors: xhlhq 2874864487@qq.com
- * @LastEditTime: 2023-02-23 19:39:11
+ * @LastEditTime: 2023-03-01 21:09:12
  * @FilePath: \f_note_book_nest\src\api\user\dto\create-user.dto.ts
  * @Description: 
  * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved. 
@@ -26,4 +26,30 @@ export class CreateUserDto {
     message: "密码长度为8-32"
   })
   password: string;
+
+  /**
+   * 昵称
+   */
+  nickname: string;
+  /**
+  * 简介
+  */
+  brief: string;
+  /**
+   * 邮箱
+   */
+  email: string;
+  /**
+   * 手机号
+   */
+  phone: string;
+
+  /**
+ * 生日
+ */
+  birthday: string;
+  /**
+   * 性别
+   */
+  gender: string;
 }

@@ -2,7 +2,7 @@
  * @Author: xhlhq 2874864487@qq.com
  * @Date: 2023-02-23 14:32:58
  * @LastEditors: xhlhq 2874864487@qq.com
- * @LastEditTime: 2023-02-28 22:37:20
+ * @LastEditTime: 2023-03-01 20:33:54
  * @FilePath: \f_note_book_nest\src\api\user\entities\user.entity.ts
  * @Description: 
  * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved. 
@@ -72,10 +72,9 @@ export class User extends BaseEntity {
     length: '36',
     default: null
   })
+  gender: string
 
   // 作者文章
   @OneToMany(() => Article, article => article.author)
   articles: Article[];
-
-  gender: string
 }

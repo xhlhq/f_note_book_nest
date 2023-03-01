@@ -2,10 +2,11 @@
  * @Author: xhlhq 2874864487@qq.com
  * @Date: 2023-02-28 22:42:01
  * @LastEditors: xhlhq 2874864487@qq.com
- * @LastEditTime: 2023-02-28 23:20:24
+ * @LastEditTime: 2023-03-01 12:15:00
  * @Description: 
  */
-import { Entity, Column } from 'typeorm'
+import { Article } from 'src/api/article/entities/article.entity'
+import { Entity, Column, ManyToMany, JoinTable } from 'typeorm'
 import BaseEntity from '../../../common/baseEntity'
 
 @Entity()

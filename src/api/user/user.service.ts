@@ -8,6 +8,7 @@ import { InjectRepository } from "@nestjs/typeorm"
 import BcryptService from 'src/utils/bcrypt';
 import { User } from './entities/user.entity';
 import { JwtService } from '@nestjs/jwt'
+import { ListUserDto } from './dto/list-user.dto';
 
 @Injectable()
 export class UserService {
@@ -56,11 +57,12 @@ export class UserService {
   }
   // 注册
   async register(createUserDto: CreateUserDto) {
+    const { username, password } = createUserDto
     const data = new User();
     const user = await this.user.findOne({
       select: ['id'],
       where: {
-        username: createUserDto.username,
+        username: username,
         del: 0
       }
     });
@@ -68,30 +70,118 @@ export class UserService {
       throw new HttpException('该用户名已注册账号', HttpStatus.NOT_FOUND);
     }
     const salt = await BcryptService.genSalt();
-    const bcryptPassword = await BcryptService.hash(createUserDto.password, salt);
-    data.username = createUserDto.username;
+    const bcryptPassword = await BcryptService.hash(password, salt);
+    data.username = username;
     data.password = bcryptPassword;
     this.user.save(data)
     return;
   }
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async create(createUserDto: CreateUserDto) {
+    const { username, password, nickname, brief, phone, email, gender, birthday } = createUserDto
+    const data = new User();
+    const user = await this.user.findOne({
+      select: ['id'],
+      where: {
+        username: username,
+        del: 0
+      }
+    });
+    if (user !== null) {
+      throw new HttpException('该用户名已注册账号', HttpStatus.NOT_FOUND);
+    }
+    const salt = await BcryptService.genSalt();
+    const bcryptPassword = await BcryptService.hash(password, salt);
+    data.username = username;
+    data.password = bcryptPassword;
+    data.nickname = nickname;
+    data.brief = brief;
+    data.phone = phone;
+    data.email = email;
+    data.gender = gender;
+    data.birthday = birthday;
+
+    await this.user.save(data);
+
+    return data;
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll(query: ListUserDto) {
+    const { pageNum = 1, pageSize = 10, username = null, nickname = null, brief = null, phone = null, email = null, gender = null } = query;
+    const skip = (pageNum - 1) * pageSize;
+    const where = {
+      username: !!username ? Like(`%${username}%`) : null,
+      nickname: !!nickname ? Like(`%${nickname}%`) : null,
+      brief: !!brief ? Like(`%${brief}%`) : null,
+      phone: !!phone ? Like(`%${phone}%`) : null,
+      email: !!email ? Like(`%${email}%`) : null,
+      gender: !!gender ? gender : null,
+      del: 0
+    }
+    const total = (await this.user.find({ where })).length;
+    const list = await this.user.find({
+      select: ['id', 'username', 'password', 'nickname', 'brief', 'phone', 'email', 'password', 'gender', 'createTime', 'updateTime', 'uuid', 'version', 'sort'],
+      where,
+      order: {
+        sort: 'DESC'
+      },
+      skip: skip,
+      take: pageSize,
+    })
+    return {
+      total,
+      pageNum,
+      pageSize,
+      list
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    const user = await this.user.findOne({
+      where: {
+        id,
+        del: 0
+      }
+    });
+    if (!user) throw new HttpException('未找到该用户', HttpStatus.NOT_FOUND);
+    delete user.password;
+    return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const { nickname, brief, phone, email, gender, birthday } = updateUserDto;
+    const user = await this.user.findOne({
+      where: {
+        id,
+        del: 0
+      }
+    });
+    if (!user) throw new HttpException('未找到该用户', HttpStatus.NOT_FOUND);
+    delete user.password;
+    // 修改用户信息
+    nickname && (user.nickname = nickname);
+    brief && (user.brief = brief);
+    phone && (user.phone = phone);
+    email && (user.email = email);
+    gender && (user.gender = gender);
+    birthday && (user.birthday = birthday);
+
+    this.user.save(user);
+
+    return user;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    const user = await this.user.findOne({
+      where: {
+        id,
+        del: 0,
+      }
+    })
+    if (!user) throw new HttpException('未找到该用户', HttpStatus.NOT_FOUND);
+    await this.user.update(id, { del: 1 })
+    return {
+      message: '删除成功'
+    };
   }
 }
