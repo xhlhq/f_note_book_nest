@@ -2,23 +2,43 @@
  * @Author: xhlhq 2874864487@qq.com
  * @Date: 2023-02-23 11:13:09
  * @LastEditors: xhlhq 2874864487@qq.com
- * @LastEditTime: 2023-02-24 22:40:49
+ * @LastEditTime: 2023-03-03 16:53:51
  * @FilePath: \f_note_book_nest\src\main.ts
  * @Description: 
  * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved. 
  */
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { NestExpressApplication } from '@nestjs/platform-express/interfaces';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { VersioningType, ValidationPipe } from '@nestjs/common';
 import * as session from 'express-session';
+import * as cors from 'cors';
 import { HttpFilter } from "./common/filter"
 import { CommonResponse } from "./common/commonResponse"
+import { IoAdapter } from '@nestjs/platform-socket.io';
+import { join } from 'path';
+
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule)
+  const app = await NestFactory.create<NestExpressApplication>(AppModule)
+
+  // 配置静态资源访问目录
+  // 加上虚拟路径
+  // app.useStaticAssets(join(__dirname, 'images'), {
+  //   prefix: "images"
+  // })
+  app.useStaticAssets(join(__dirname, 'images'))
+
+
+  // websocket 适配器
+  app.useWebSocketAdapter(new IoAdapter(app));
+
+  // 跨域
+  app.use(cors());
+
   // 设置统一前缀
-  app.setGlobalPrefix('note-api');
+  app.setGlobalPrefix('v1');
   // 设置版本号
   app.enableVersioning({
     type: VersioningType.HEADER,

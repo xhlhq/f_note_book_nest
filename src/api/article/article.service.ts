@@ -2,7 +2,7 @@
  * @Author: xhlhq 2874864487@qq.com
  * @Date: 2023-02-24 10:02:18
  * @LastEditors: xhlhq 2874864487@qq.com
- * @LastEditTime: 2023-03-01 20:18:33
+ * @LastEditTime: 2023-03-03 10:31:20
  * @Description: 
  */
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
@@ -15,6 +15,7 @@ import { User } from '../user/entities/user.entity';
 import { Classify } from '../classify/entities/classify.entity';
 import { Keyword } from '../keyword/entities/keyword.entity';
 import { ListArticleDto } from './dto/list-article.dto';
+import { marked } from 'marked';
 
 
 @Injectable()
@@ -224,5 +225,67 @@ export class ArticleService {
     return {
       message: "删除成功"
     };
+  }
+
+  async findAllPC(query: ListArticleDto) {
+    const { pageNum = 1, pageSize = 10, classifyId, keywordId, title, subTitle, description, resource, content } = query;
+    const skip = (pageNum - 1) * pageSize;
+    const where = {
+      classify: {
+        id: classifyId
+      },
+      keywords: {
+        id: keywordId
+      },
+      title: !!title ? Like(`%${title}%`) : null,
+      subTitle: !!subTitle ? Like(`%${subTitle}%`) : null,
+      description: !!description ? Like(`%${description}%`) : null,
+      resource: !!resource ? Like(`%${resource}%`) : null,
+      content: {
+        content: !!content ? Like(`%${content}%`) : null,
+      },
+      del: 0
+    }
+    const total = (await this.article.find({ where })).length;
+    const list = await this.article.find({
+      where: where,
+      relations: ['keywords'],
+      order: {
+        sort: 'DESC'
+      },
+      skip: skip,
+      take: pageSize
+    })
+    return {
+      total,
+      pageNum,
+      pageSize,
+      list: list
+    };
+  }
+
+  async findOnePC(id: number) {
+    const article = await this.article.findOne({
+      where: {
+        id: id,
+        del: 0
+      },
+      relations: ['author', 'content', 'classify', 'keywords'],
+    })
+    if (!article) throw new HttpException('不存在该文章', HttpStatus.BAD_REQUEST);
+    return article;
+  }
+
+  async findOneHtml(id: number) {
+    const article = await this.article.findOne({
+      where: {
+        id: id,
+        del: 0
+      },
+      relations: ['author', 'content', 'classify', 'keywords'],
+    })
+    if (!article) throw new HttpException('不存在该文章', HttpStatus.BAD_REQUEST);
+    article.content.content = marked.parse(article.content.content);
+    return article;
   }
 }

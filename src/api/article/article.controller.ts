@@ -23,6 +23,15 @@ export class ArticleController {
     return this.articleService.findAll(query, user);
   }
 
+  @Get('/pc')
+  findAllPC(@Query() query: ListArticleDto) {
+    return this.articleService.findAllPC(query);
+  }
+  @Get('/pc/:id')
+  findOnePc(@Param('id') id: string) {
+    return this.articleService.findOnePC(+id);
+  }
+
   @Get(':id')
   @UseGuards(AuthGuard('jwt'))
   findOne(@Param('id') id: string) {
