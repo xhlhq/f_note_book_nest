@@ -7,7 +7,7 @@ export class MyFile extends BaseEntity {
     type: 'char',
     comment: '类型',
     length: '40',
-    default: null
+    default: 'other'
   })
   type: string
 
@@ -15,7 +15,7 @@ export class MyFile extends BaseEntity {
     type: 'char',
     comment: '副类型',
     length: '40',
-    default: null
+    default: 'other'
   })
   subType: string
 
@@ -73,6 +73,7 @@ export class MyFile extends BaseEntity {
     default: null
   })
   filename: string
+
   @Column({
     type: 'char',
     comment: '文件路径',

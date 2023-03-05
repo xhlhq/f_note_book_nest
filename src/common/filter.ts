@@ -1,3 +1,10 @@
+/*
+ * @Author: xhlhq 2874864487@qq.com
+ * @Date: 2023-02-24 10:02:18
+ * @LastEditors: xhlhq 2874864487@qq.com
+ * @LastEditTime: 2023-03-03 22:11:09
+ * @Description: 
+ */
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException } from "@nestjs/common"
 import { Request, Response } from "express"
 import { isArray, isString } from 'lodash'
@@ -24,8 +31,8 @@ export class HttpFilter implements ExceptionFilter {
         message = msg.length > 0 ? msg[0] : '未知错误'
       }
     }
-    response.status(status).json({
-      status,
+    response.status(200).json({
+      code: status,
       message: message,
       timestamp: new Date().toISOString(),
       path: request.url

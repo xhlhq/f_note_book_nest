@@ -36,6 +36,7 @@
     "class-validator": "^0.14.0",
     "compressing": "^1.8.0",
     "cors": "^2.8.5",
+    "express-rate-limit": "^6.7.0",
     "express-session": "^1.17.3",
     "lodash": "^4.17.21",
     "marked": "^4.2.12",

@@ -5,7 +5,7 @@
  * @LastEditTime: 2023-03-03 17:46:23
  * @Description: 
  */
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, Res, Query } from '@nestjs/common';
 import { FileService } from './file.service';
 import { CreateFileDto } from './dto/create-file.dto';
 import { UpdateFileDto } from './dto/update-file.dto';
@@ -13,6 +13,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { zip } from 'compressing';
 import { Response } from "express";
 import { join } from 'path';
+import { ListFileDto } from './dto/list-file.dto';
 
 @Controller('file')
 export class FileController {
@@ -46,8 +47,8 @@ export class FileController {
   }
 
   @Get()
-  findAll() {
-    return this.fileService.findAll();
+  findAll(@Query() query: ListFileDto) {
+    return this.fileService.findAll(query);
   }
 
   @Get(':id')

@@ -2,7 +2,7 @@
  * @Author: xhlhq 2874864487@qq.com
  * @Date: 2023-02-23 14:21:42
  * @LastEditors: xhlhq 2874864487@qq.com
- * @LastEditTime: 2023-02-28 22:25:57
+ * @LastEditTime: 2023-03-03 22:14:46
  * @FilePath: \f_note_book_nest\src\common\response.ts
  * @Description: 
  * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved. 
@@ -27,6 +27,7 @@ export class CommonResponse<T> implements NestInterceptor {
     }
     return next.handle().pipe(map(data => {
       let response = {
+        code: statusCode,
         data,
         message,
       };

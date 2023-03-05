@@ -2,7 +2,7 @@
  * @Author: xhlhq 2874864487@qq.com
  * @Date: 2023-02-24 10:02:18
  * @LastEditors: xhlhq 2874864487@qq.com
- * @LastEditTime: 2023-03-01 21:39:45
+ * @LastEditTime: 2023-03-05 10:24:06
  * @Description: 
  */
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
@@ -33,10 +33,14 @@ export class UserService {
       background: '#3949ab',
     });
     session.code = svg.text;
+    console.log("svg", session.code);
+    console.log("svg-session", session);
     return svg.data
   }
   // 登录
   async login(loginUserDto: LoginUserDto, session) {
+    console.log("code", session.code);
+    console.log("session", session);
     if (!session.code) {
       throw new HttpException('验证码已失效', HttpStatus.BAD_REQUEST);
     }
@@ -58,6 +62,7 @@ export class UserService {
       throw new HttpException('密码不正确', HttpStatus.BAD_REQUEST);
     }
     return {
+      code: 200,
       token: this.jwtService.sign(String(user.id)),
       message: '登录成功'
     };
@@ -81,7 +86,11 @@ export class UserService {
     data.username = username;
     data.password = bcryptPassword;
     this.user.save(data)
-    return;
+    return {
+      code: 201,
+      data: null,
+      message: '注册成功'
+    };
   }
 
   async create(createUserDto: CreateUserDto) {
